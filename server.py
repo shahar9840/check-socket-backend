@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_restful import Resource, Api
-from flask_jwt_extended import JWTManager
+
 from flask_socketio import SocketIO
 from socket_instance import socketio
 from db import db
@@ -13,7 +13,7 @@ api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ZaSvzITGYvRgQajMXiRSAgTVmEgyZhzq@junction.proxy.rlwy.net:45906/railway'
 db.init_app(app)
 app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this in production
-jwt = JWTManager(app)
+
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
