@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_restful import Resource, Api
-
+import os
 from flask_socketio import SocketIO
 from socket_instance import socketio
 from db import db
@@ -50,13 +50,14 @@ class Home(Resource):
     def get(self):
         # Return JSON-compatible dictionary
         return {"message": "connected"}, 200
-    
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')   
 
 @socketio.on('message')
 def handle_message(data):
     print('received message: ' , data)
     socketio.emit('server_message', data)
-
 
 
 with app.app_context():
