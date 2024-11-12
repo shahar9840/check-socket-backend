@@ -5,12 +5,16 @@ import os
 from flask_socketio import SocketIO
 from socket_instance import socketio
 from db import db
+import pymysql
+
+# Use PyMySQL as MySQLdb
+pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 socketio.init_app(app, cors_allowed_origins="http://localhost:3000")
 api = Api(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ZaSvzITGYvRgQajMXiRSAgTVmEgyZhzq@junction.proxy.rlwy.net:45906/railway'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:ZaSvzITGYvRgQajMXiRSAgTVmEgyZhzq@junction.proxy.rlwy.net:45906/railway'
 db.init_app(app)
 app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this in production
 
@@ -35,7 +39,6 @@ class CreateUser(Resource):
         new_user = Users(**data)
         db.session.add(new_user)
         db.session.commit()
-        # Return response as a proper JSON response
         return {"message": "user created", "user": new_user.serialize()}, 201
 
 class Login(Resource):
@@ -48,17 +51,16 @@ class Login(Resource):
 
 class Home(Resource):
     def get(self):
-        # Return JSON-compatible dictionary
         return {"message": "connected"}, 200
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')   
 
 @socketio.on('message')
 def handle_message(data):
-    print('received message: ' , data)
+    print('received message: ', data)
     socketio.emit('server_message', data)
-
 
 with app.app_context():
     db.create_all()
