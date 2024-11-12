@@ -7,8 +7,8 @@ from socket_instance import socketio
 from db import db
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
-socketio.init_app(app, cors_allowed_origins="*")
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+socketio.init_app(app, cors_allowed_origins="http://localhost:3000")
 api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ZaSvzITGYvRgQajMXiRSAgTVmEgyZhzq@junction.proxy.rlwy.net:45906/railway'
 db.init_app(app)
