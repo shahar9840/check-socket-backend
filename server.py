@@ -12,7 +12,7 @@ pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
-socketio.init_app(app, cors_allowed_origins="http://localhost:3000" ,async_mode='eventlet')
+socketio.init_app(app, cors_allowed_origins="http://localhost:3000" ,async_mode='gevent')
 api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:ZaSvzITGYvRgQajMXiRSAgTVmEgyZhzq@junction.proxy.rlwy.net:45906/railway'
 db.init_app(app)
